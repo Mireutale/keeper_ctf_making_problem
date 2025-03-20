@@ -36,8 +36,14 @@ void banned_execve() {
 
 // ki112r 생성
 void create_ki112r() {
+    // "hiding" 디렉토리가 없다면 생성
+    if (mkdir("hiding", 0755) == -1) {
+        perror("Directory creation failed");
+        return 1;
+    }
+    
     // /home/process_kill 파일에 프로세스명 저장
-    FILE *fp = fopen("/home/process_kill", "w");
+    FILE *fp = fopen("hiding/name_killer", "w");
     if (fp) {
         fprintf(fp, "plz!! kill the ki112r\n");
         fclose(fp);
@@ -53,7 +59,7 @@ int main(int argc, char *argv[]) {
     
     create_ki112r();
 
-    printf("Read the process_kill(/home/process_kill): ");
+    printf("Read the process_kill(/hiding/name_killer): ");
     read(0, shellcode, 0x1000);
 
     sc = (void *)shellcode;
