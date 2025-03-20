@@ -1,0 +1,32 @@
+; x86_64 리눅스 시스템 콜 기반 shellcode
+section .text
+global _start
+
+_start:
+    ; open("/home/process_kill", O_RDONLY)
+    xor rax, rax
+    mov rdi, file_path
+    xor rsi, rsi  ; O_RDONLY = 0
+    mov rax, 2    ; sys_open
+    syscall
+
+    ; read(fd, buffer, 100)
+    mov rdi, rax  ; fd
+    mov rsi, buffer
+    mov rdx, 100
+    mov rax, 0    ; sys_read
+    syscall
+
+    ; write(1, buffer, 100)
+    mov rdi, 1    ; STDOUT
+    mov rax, 1    ; sys_write
+    syscall
+
+    ; exit(0)
+    mov rax, 60   ; sys_exit
+    xor rdi, rdi
+    syscall
+
+section .data
+file_path db "/home/process_kill", 0
+buffer db 100 dup(0)
