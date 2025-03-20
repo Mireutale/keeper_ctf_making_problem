@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     init();
     banned_execve();
     
-    create_process();
+    create_ki112r();
 
     printf("Read the process_kill(/home/process_kill): ");
     read(0, shellcode, 0x1000);
