@@ -18,11 +18,8 @@ void open_file_descriptor() {
         exit(1);
     }
 
-    // 특정 FD(예: 3)에 할당하고 기존 FD 닫기
     dup2(fd, 255);
     close(fd);
-
-    printf("[*] 파일이 FD 3으로 열렸습니다!\n");
 }
 
 void init() {
@@ -31,7 +28,7 @@ void init() {
     signal(SIGALRM, alarm_handler);
     alarm(10);
 
-    open_file_descriptor();  // 파일 자동 오픈
+    open_file_descriptor();
 }
 
 void banned_execve() {
@@ -50,8 +47,8 @@ void main(int argc, char *argv[]) {
     char *shellcode = mmap(NULL, 0x1000, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
     void (*sc)();
     
-    init();  // 프로그램 실행 시 자동으로 FD 열기
-
+    init();
+    
     banned_execve();
 
     printf("shellcode: ");
@@ -60,4 +57,3 @@ void main(int argc, char *argv[]) {
     sc = (void *)shellcode;
     sc();
 }
-
